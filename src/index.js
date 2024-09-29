@@ -1,11 +1,21 @@
+const fs = require("fs");
+const path = require("path");
+const https = require("https");
 const config = require("config");
 const express = require("express");
 const vhost = require("vhost");
-const https = require("https");
-const path = require("path");
 
-function createVirtualHost({ host, folder }) {
-  console.log(host);
+function createVirtualHost(app, { host, folder, ssl }) {
+  if (ssl) {
+    app.use(function (request, response, next) {
+      if (!request.secure) {
+        return response.redirect(
+          "https://" + request.headers.host + request.url
+        );
+      }
+      next();
+    });
+  }
   const root = path.resolve(__dirname, path.resolve("sites", folder));
   app.use(vhost(host, express.static(root)));
   app.use(
@@ -15,29 +25,35 @@ function createVirtualHost({ host, folder }) {
   );
 }
 
-//Create server
-var app = express();
 console.log("sites:");
-config.get("sites").forEach((site) => createVirtualHost(site));
+config.get("sites").forEach((site) => {
+  console.log(site.host);
+});
 
 console.log("------------------------");
 
 //Start server
-var port = config.get("port");
+const port = config.get("port");
 
-if (config.get("ssl")) {
+if (port.http) {
+  const app = express();
+  config.get("sites").forEach((site) => createVirtualHost(app, site));
+  app.listen(port.http, () => {
+    console.log("web server listening on port %d", port.http);
+  });
+}
+
+if (port.https) {
+  const app = express();
+  config.get("sites").forEach((site) => createVirtualHost(app, site));
   const sslServer = https.createServer(
     {
-      key: fs.readFileSync(path.join(__dirname, "cert", "key.pem")),
-      cert: fs.readFileSync(path.join(__dirname, "cert", "cert.pem")),
+      key: fs.readFileSync(path.join(process.cwd(), "cert", "key.pem")),
+      cert: fs.readFileSync(path.join(process.cwd(), "cert", "cert.pem")),
     },
     app
   );
-  sslServer.listen(port, () => {
-    console.log("ssl server listening on port %d", port);
-  });
-} else {
-  app.listen(port, () => {
-    console.log("web server listening on port %d", port);
+  sslServer.listen(port.https, () => {
+    console.log("ssl server listening on port %d", port.https);
   });
 }

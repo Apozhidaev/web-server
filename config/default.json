@@ -1,10 +1,13 @@
 {
-  "port": 8080,
-  "ssl": false,
+  "port": {
+    "http": 80,
+    "https": 443
+  },
   "sites": [
     {
-      "host": "alexanderpo.com",
-      "folder": "alexanderpo.com"
+      "ssl": true,
+      "host": "example.com",
+      "folder": "example.com"
     }
   ]
 }
