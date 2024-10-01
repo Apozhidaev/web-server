@@ -1,0 +1,16 @@
+{
+  "port": {
+    "http": 80
+  },
+  "sites": [
+    {
+      "host": "localhost",
+      "redirectTo": "https://example.com"
+    },
+    {
+      "spa": true,
+      "host": "example.com",
+      "folder": "example.com"
+    }
+  ]
+}

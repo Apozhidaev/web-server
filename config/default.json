@@ -5,14 +5,9 @@
   },
   "sites": [
     {
-      "host": "example1.com",
-      "redirectTo": "http://example2.com"
-    },
-    {
       "ssl": true,
-      "spa": true,
-      "host": "example2.com",
-      "folder": "example2"
+      "host": "localhost",
+      "folder": "localhost"
     }
   ]
 }
