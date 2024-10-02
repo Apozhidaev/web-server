@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import https from "https";
 import express from "express";
-import { createVirtualHost } from "./utils";
+import { createVirtualHost } from "./virtualHost";
 import { certFolder, port, sites } from "./settings";
 
 if (port.https) {

@@ -1,5 +1,5 @@
 import express from "express";
-import { createVirtualHost, redirectToHttps } from "./utils";
+import { createVirtualHost, redirectToHttps } from "./virtualHost";
 import { port, sites } from "./settings";
 
 if (port.http) {
