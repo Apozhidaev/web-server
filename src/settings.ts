@@ -9,6 +9,7 @@ type PortConfig = {
 export type SiteConfig = { host: string } & (
   | { folder: string; ssl?: boolean; spa?: boolean }
   | { redirectTo: string }
+  | { proxyTo: string }
 );
 
 export const port = config.get<PortConfig>("port");

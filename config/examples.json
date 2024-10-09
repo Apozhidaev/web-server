@@ -8,6 +8,15 @@
       "redirectTo": "https://example.com"
     },
     {
+      "host": "localhost",
+      "proxyTo": "https://example.com"
+    },
+    {
+      "ssl": true,
+      "host": "localhost",
+      "folder": "localhost"
+    },
+    {
       "spa": true,
       "host": "example.com",
       "folder": "example.com"
