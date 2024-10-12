@@ -1,15 +1,19 @@
+import fs from "fs";
 import express, { Express } from "express";
-import { createProxyMiddleware } from 'http-proxy-middleware';
+import { createProxyMiddleware } from "http-proxy-middleware";
 import vhost from "vhost";
 import path from "path";
 import { SiteConfig } from "./settings";
 
 function proxyToUrl(app: Express, host: string, proxyTo: string) {
   app.use(
-    vhost(host, createProxyMiddleware({
-      target: proxyTo,
-      changeOrigin: true,
-    }))
+    vhost(
+      host,
+      createProxyMiddleware({
+        target: proxyTo,
+        changeOrigin: true,
+      })
+    )
   );
 }
 
@@ -26,7 +30,15 @@ function useStatic(app: Express, host: string, folder: string, spa?: boolean) {
   app.use(vhost(host, express.static(root, { extensions: ["html"] }) as any));
   app.use(
     vhost(host, (req, res: any) => {
-      res.sendFile(spa ? "index.html" : "404.html", { root });
+      if (spa) {
+        res.sendFile("index.html", { root });
+      } else {
+        if (fs.existsSync(path.resolve(root, "404.html"))) {
+          res.sendFile("404.html", { root });
+        } else {
+          res.sendStatus(404);
+        }
+      }
     })
   );
 }
