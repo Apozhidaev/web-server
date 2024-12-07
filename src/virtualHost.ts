@@ -1,11 +1,11 @@
-import fs from "fs";
-import express, { Express } from "express";
+import fs from "node:fs";
+import path from "node:path";
+import express, { Application } from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import vhost from "vhost";
-import path from "path";
 import { SiteConfig } from "./settings";
 
-function proxyToUrl(app: Express, host: string, proxyTo: string) {
+function proxyToUrl(app: Application, host: string, proxyTo: string) {
   app.use(
     vhost(
       host,
@@ -17,7 +17,7 @@ function proxyToUrl(app: Express, host: string, proxyTo: string) {
   );
 }
 
-function redirectToUrl(app: Express, host: string, redirectTo: string) {
+function redirectToUrl(app: Application, host: string, redirectTo: string) {
   app.use(
     vhost(host, (req, res: any) => {
       return res.redirect(redirectTo);
@@ -25,7 +25,12 @@ function redirectToUrl(app: Express, host: string, redirectTo: string) {
   );
 }
 
-function useStatic(app: Express, host: string, folder: string, spa?: boolean) {
+function useStatic(
+  app: Application,
+  host: string,
+  folder: string,
+  spa?: boolean
+) {
   const root = path.resolve(process.cwd(), "sites", folder);
   app.use(vhost(host, express.static(root, { extensions: ["html"] }) as any));
   app.use(
@@ -43,7 +48,7 @@ function useStatic(app: Express, host: string, folder: string, spa?: boolean) {
   );
 }
 
-export function redirectToHttps(app: Express, host: string, port: number) {
+export function redirectToHttps(app: Application, host: string, port: number) {
   app.use(
     vhost(host, (req, res: any) => {
       return res.redirect(`https://${host}:${port}${req.url}`);
@@ -51,7 +56,7 @@ export function redirectToHttps(app: Express, host: string, port: number) {
   );
 }
 
-export function createVirtualHost(app: Express, site: SiteConfig) {
+export function createVirtualHost(app: Application, site: SiteConfig) {
   if ("redirectTo" in site) {
     redirectToUrl(app, site.host, site.redirectTo);
   } else if ("proxyTo" in site) {
