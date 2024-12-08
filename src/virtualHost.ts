@@ -2,8 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import express, { Application } from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
-import vhost from "vhost";
 import { SiteConfig } from "./settings";
+import { vhost } from "./vhost";
 
 function proxyToUrl(app: Application, host: string, proxyTo: string) {
   app.use(
