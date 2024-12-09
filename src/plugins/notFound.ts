@@ -15,10 +15,10 @@ export function NotFoundPlugin(
       if (staticSite) {
         const { spa, root } = staticSite;
         if (spa) {
-          reply.sendFile("index.html", root);
+          reply.type("text/html").sendFile("index.html", root);
         } else {
           if (fs.existsSync(path.resolve(root, "404.html"))) {
-            reply.code(404).sendFile("404.html", root);
+            reply.code(404).type("text/html").sendFile("404.html", root);
           } else {
             reply.callNotFound();
           }
