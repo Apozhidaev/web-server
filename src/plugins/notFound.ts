@@ -15,11 +15,9 @@ export function NotFoundPlugin(
       if (staticSite) {
         const { spa, root } = staticSite;
         if (spa) {
-          // @ts-ignore
           reply.sendFile("index.html", root);
         } else {
           if (fs.existsSync(path.resolve(root, "404.html"))) {
-            // @ts-ignore
             reply.code(404).sendFile("404.html", root);
           } else {
             reply.callNotFound();
