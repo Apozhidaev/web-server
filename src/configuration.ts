@@ -6,7 +6,7 @@ type PortConfig = {
   https?: number;
 };
 
-type HostConfig = { host: string };
+export type HostConfig = { host: string };
 type StaticConfig = { folder: string; ssl?: boolean; spa?: boolean };
 type RedirectConfig = { redirectTo: string };
 type ProxyConfig = { proxyTo: string };
@@ -20,10 +20,10 @@ export type RedirectSite = HostConfig & RedirectConfig;
 export type ProxySite = HostConfig & ProxyConfig;
 
 export const port = config.get<PortConfig>("port");
-export const sites = config.get<SiteConfig[]>("sites");
+const sites = config.get<SiteConfig[]>("sites");
 export const certFolder = path.resolve(process.cwd(), "cert");
 
-export const staticSites = sites
+const staticSites = sites
   .filter((site) => "folder" in site)
   .map((site) => ({
     host: site.host,
@@ -34,10 +34,8 @@ export const staticSites = sites
 export const redirectSites = sites.filter((site) => "redirectTo" in site);
 export const proxySites = sites.filter((site) => "proxyTo" in site);
 
-export const staticSiteMap = staticSites.reduce((acc, cur) => {
-  acc[cur.host] = cur;
-  return acc;
-}, {} as Record<string, StaticSite>);
+export const httpSites = staticSites.filter((x) => !x.ssl);
+export const httpsSites = staticSites.filter((x) => x.ssl);
 
 console.log("sites:");
 sites.forEach((site) => {
