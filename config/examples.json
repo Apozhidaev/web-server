@@ -19,7 +19,8 @@
     {
       "spa": true,
       "host": "example.com",
-      "folder": "example.com"
+      "folder": "example.com",
+      "maxAge": "365d"
     }
   ]
 }

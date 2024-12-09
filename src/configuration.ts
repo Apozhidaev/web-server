@@ -7,7 +7,7 @@ type PortConfig = {
 };
 
 export type HostConfig = { host: string };
-type StaticConfig = { folder: string; ssl?: boolean; spa?: boolean };
+type StaticConfig = { folder: string; ssl?: boolean; spa?: boolean; maxAge?: string };
 type RedirectConfig = { redirectTo: string };
 type ProxyConfig = { proxyTo: string };
 
@@ -30,6 +30,7 @@ const staticSites = sites
     root: path.resolve(process.cwd(), "sites", site.folder),
     ssl: site.ssl,
     spa: site.spa,
+    maxAge: site.maxAge,
   }));
 export const redirectSites = sites.filter((site) => "redirectTo" in site);
 export const proxySites = sites.filter((site) => "proxyTo" in site);
