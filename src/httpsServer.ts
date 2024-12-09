@@ -2,12 +2,12 @@ import fs from "node:fs";
 import path from "node:path";
 import http2 from "node:http2";
 import express from "express";
-import http2Express from "http2-express";
+import http2Bridge from "http2-express-bridge";
 import { createVirtualHost } from "./virtualHost";
 import { certFolder, port, sites } from "./settings";
 
 if (port.https) {
-  const app = http2Express(express);
+  const app = http2Bridge(express);
   sites.forEach((site) => {
     createVirtualHost(app, site);
   });
