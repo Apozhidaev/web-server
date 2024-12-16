@@ -1,8 +1,9 @@
 import { FastifyInstance } from "fastify";
+import fp from "fastify-plugin";
 import { RedirectSite } from "../configuration";
 import { createSiteMap } from "./utils";
 
-export function RedirectToUrlPlugin(
+export const RedirectToUrlPlugin = fp(function RedirectToUrlPlugin(
   fastify: FastifyInstance<any>,
   { redirectSites }: { redirectSites: RedirectSite[] }
 ) {
@@ -16,4 +17,4 @@ export function RedirectToUrlPlugin(
       done();
     });
   }
-}
+});

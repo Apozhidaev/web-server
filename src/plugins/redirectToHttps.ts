@@ -1,8 +1,9 @@
 import { FastifyInstance } from "fastify";
+import fp from "fastify-plugin";
 import { port, StaticSite } from "../configuration";
 import { createSiteMap } from "./utils";
 
-export function RedirectToHttpsPlugin(
+export const RedirectToHttpsPlugin = fp(function RedirectToHttpsPlugin(
   fastify: FastifyInstance<any>,
   { httpsSites }: { httpsSites: StaticSite[] }
 ) {
@@ -16,4 +17,4 @@ export function RedirectToHttpsPlugin(
       done();
     });
   }
-}
+});
